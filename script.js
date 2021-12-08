@@ -109,7 +109,11 @@ class App {
   }
 
   _newWorkout(e) {
+    const validInputs = (...inputs) => inputs.every(inp => Number.isFinite(inp)) // loop over array and then in each of them check whether the number is finite or not. '.every' method will only return true if 'Number.isFinite(inp)' is true for all of them
+    const allPositive = (...inputs) => inputs.every(inp => inp > 0);
+
     e.preventDefault();
+
 
     // Get data from form
     const type = inputType.value;
@@ -122,9 +126,10 @@ class App {
       const cadence = +inputCadence.value;
       // Check if data is valid 
       if (
-        !Number.isFinite(distance) ||
-        !Number.isFinite(duration) ||
-        !Number.isFinite(cadence)
+        // !Number.isFinite(distance) ||
+        // !Number.isFinite(duration) ||
+        // !Number.isFinite(cadence)
+        !validInputs(distance, duration, cadence) || !allPositive(distance, duration, cadence)
         ) 
         return alert('Inputs have to be positive numbers!'); // using guard clause
     }
@@ -132,6 +137,10 @@ class App {
     // If workout cycling, create cycling object
     if (type === "cycling") {
       const elevation = +inputElevation.value;
+      if (
+        !validInputs(distance, duration, elevation) || !allPositive(distance, duration)
+        ) 
+        return alert('Inputs have to be positive numbers!'); // using guard clause
     }
     // Add new object to workout array
 
