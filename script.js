@@ -116,11 +116,17 @@ class App {
     const distance = +inputDistance.value; //setting to integer as default is string '+'
     const duration = +inputDuration.value;
 
-    // Check if data is valid 
-
+    
     // If workout running, create running object 
     if (type === "running"){
       const cadence = +inputCadence.value;
+      // Check if data is valid 
+      if (
+        !Number.isFinite(distance) ||
+        !Number.isFinite(duration) ||
+        !Number.isFinite(cadence)
+        ) 
+        return alert('Inputs have to be positive numbers!'); // using guard clause
     }
 
     // If workout cycling, create cycling object
