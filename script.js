@@ -151,11 +151,11 @@ class App {
 
         workout = new Cycling([lat, lng], distance, duration, elevation);
     }
-    // Add new object to workout array
 
-    // Render workout on map as marker 
-    console.log(this.#mapEvent);
-    
+    // Add new object to workout array
+    this.#workouts.push(workout);
+
+    // Render workout on map as marker     
     L.marker([lat, lng])
       .addTo(this.#map)
       .bindPopup(
