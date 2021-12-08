@@ -61,6 +61,8 @@ class App {
   // private property instances
   #map;
   #mapEvent;
+  #workouts = [];
+
   constructor() {
     this._getPosition();
 
@@ -109,6 +111,7 @@ class App {
   }
 
   _newWorkout(e) {
+                 /*takes in arbitrary # of inputs */
     const validInputs = (...inputs) => inputs.every(inp => Number.isFinite(inp)) // loop over array and then in each of them check whether the number is finite or not. '.every' method will only return true if 'Number.isFinite(inp)' is true for all of them
     const allPositive = (...inputs) => inputs.every(inp => inp > 0);
 
@@ -117,9 +120,10 @@ class App {
 
     // Get data from form
     const type = inputType.value;
-    const distance = +inputDistance.value; //setting to integer as default is string '+'
+    const distance = +inputDistance.value; //setting to integer, as default is string
     const duration = +inputDuration.value;
-
+    const { lat, lng } = this.#mapEvent.latlng; //destructuring to get lat, lng
+    let workout; 
     
     // If workout running, create running object 
     if (type === "running"){
@@ -132,6 +136,9 @@ class App {
         !validInputs(distance, duration, cadence) || !allPositive(distance, duration, cadence)
         ) 
         return alert('Inputs have to be positive numbers!'); // using guard clause
+
+        workout = new Running([lat, lng], distance, duration, cadence); 
+        
     }
 
     // If workout cycling, create cycling object
@@ -141,12 +148,14 @@ class App {
         !validInputs(distance, duration, elevation) || !allPositive(distance, duration)
         ) 
         return alert('Inputs have to be positive numbers!'); // using guard clause
+
+        workout = new Cycling([lat, lng], distance, duration, elevation);
     }
     // Add new object to workout array
 
     // Render workout on map as marker 
     console.log(this.#mapEvent);
-    const { lat, lng } = this.#mapEvent.latlng;
+    
     L.marker([lat, lng])
       .addTo(this.#map)
       .bindPopup(
